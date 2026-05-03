@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { weddingConfig as W } from "@/lib/wedding-config";
 import { Cover } from "@/components/wedding/Cover";
 import { Countdown } from "@/components/wedding/Countdown";
@@ -7,7 +7,7 @@ import { RSVP } from "@/components/wedding/RSVP";
 import { Section, SectionTitle } from "@/components/wedding/Section";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Calendar, Clock, MapPin, Heart } from "lucide-react";
+import { Calendar, Clock, MapPin, Heart, Music, Pause } from "lucide-react";
 import couple from "@/assets/couple-hero.jpg";
 import floral from "@/assets/floral-ornament.png";
 
@@ -33,6 +33,8 @@ export const Route = createFileRoute("/")({
 
 function Invitation() {
   const [opened, setOpened] = useState(false);
+  const [playing, setPlaying] = useState(false);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
 
   const guestName = useMemo(() => {
     if (typeof window === "undefined") return "Tamu Undangan";
@@ -45,9 +47,39 @@ function Invitation() {
     if (opened) window.scrollTo({ top: 0, behavior: "smooth" });
   }, [opened]);
 
+  const handleOpen = () => {
+    setOpened(true);
+    const audio = audioRef.current;
+    if (audio) {
+      audio.volume = 0.6;
+      audio.play().then(() => setPlaying(true)).catch(() => setPlaying(false));
+    }
+  };
+
+  const toggleMusic = () => {
+    const audio = audioRef.current;
+    if (!audio) return;
+    if (audio.paused) {
+      audio.play().then(() => setPlaying(true)).catch(() => {});
+    } else {
+      audio.pause();
+      setPlaying(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-background relative overflow-x-hidden">
-      {!opened && <Cover guestName={guestName} onOpen={() => setOpened(true)} />}
+      <audio ref={audioRef} src="/wedding-sound.mp3" loop preload="auto" />
+      {opened && (
+        <button
+          onClick={toggleMusic}
+          aria-label={playing ? "Jeda musik" : "Putar musik"}
+          className="fixed bottom-5 right-5 z-40 w-12 h-12 rounded-full bg-gold text-accent-foreground shadow-elegant flex items-center justify-center hover:opacity-90 transition"
+        >
+          {playing ? <Pause className="h-5 w-5" /> : <Music className="h-5 w-5 animate-pulse" />}
+        </button>
+      )}
+      {!opened && <Cover guestName={guestName} onOpen={handleOpen} />}
 
       {/* HERO */}
       <section className="relative h-screen min-h-[640px] flex items-end justify-center overflow-hidden">
