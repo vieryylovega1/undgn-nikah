@@ -7,7 +7,7 @@ import { RSVP } from "@/components/wedding/RSVP";
 import { Section, SectionTitle } from "@/components/wedding/Section";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Calendar, Clock, MapPin, Heart, Music, Pause } from "lucide-react";
+import { Calendar, Clock, MapPin, Heart, Music, Pause, Volume2, VolumeX } from "lucide-react";
 import couple from "@/assets/couple-hero.jpg";
 import floral from "@/assets/floral-ornament.png";
 
@@ -34,6 +34,9 @@ export const Route = createFileRoute("/")({
 function Invitation() {
   const [opened, setOpened] = useState(false);
   const [playing, setPlaying] = useState(false);
+  const [volume, setVolume] = useState(0.6);
+  const [muted, setMuted] = useState(false);
+  const [showVolume, setShowVolume] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   const guestName = useMemo(() => {
@@ -47,11 +50,19 @@ function Invitation() {
     if (opened) window.scrollTo({ top: 0, behavior: "smooth" });
   }, [opened]);
 
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+    audio.volume = volume;
+    audio.muted = muted;
+  }, [volume, muted]);
+
   const handleOpen = () => {
     setOpened(true);
     const audio = audioRef.current;
     if (audio) {
-      audio.volume = 0.6;
+      audio.volume = volume;
+      audio.muted = muted;
       audio.play().then(() => setPlaying(true)).catch(() => setPlaying(false));
     }
   };
@@ -67,17 +78,62 @@ function Invitation() {
     }
   };
 
+  const toggleMute = () => {
+    setMuted((m) => {
+      const next = !m;
+      if (!next && volume === 0) setVolume(0.6);
+      return next;
+    });
+  };
+
+  const onVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const v = Number(e.target.value) / 100;
+    setVolume(v);
+    if (v > 0 && muted) setMuted(false);
+    if (v === 0) setMuted(true);
+  };
+
   return (
     <div className="min-h-screen bg-background relative overflow-x-hidden">
       <audio ref={audioRef} src="/wedding-sound.mp3" loop preload="auto" />
       {opened && (
-        <button
-          onClick={toggleMusic}
-          aria-label={playing ? "Jeda musik" : "Putar musik"}
-          className="fixed bottom-5 right-5 z-40 w-12 h-12 rounded-full bg-gold text-accent-foreground shadow-elegant flex items-center justify-center hover:opacity-90 transition"
-        >
-          {playing ? <Pause className="h-5 w-5" /> : <Music className="h-5 w-5 animate-pulse" />}
-        </button>
+        <div className="fixed bottom-5 right-5 z-40 flex items-center gap-2">
+          {showVolume && (
+            <div className="flex items-center gap-2 bg-card/95 backdrop-blur border border-gold/30 shadow-elegant rounded-full px-3 py-2 animate-fade-up">
+              <button
+                onClick={toggleMute}
+                aria-label={muted ? "Bunyikan" : "Bisukan"}
+                className="text-foreground/80 hover:text-gold transition"
+              >
+                {muted || volume === 0 ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
+              </button>
+              <input
+                type="range"
+                min={0}
+                max={100}
+                value={Math.round((muted ? 0 : volume) * 100)}
+                onChange={onVolumeChange}
+                aria-label="Volume musik"
+                className="w-24 accent-[hsl(var(--gold))] cursor-pointer"
+              />
+            </div>
+          )}
+          <button
+            onClick={toggleMusic}
+            onDoubleClick={() => setShowVolume((s) => !s)}
+            aria-label={playing ? "Jeda musik" : "Putar musik"}
+            className="w-12 h-12 rounded-full bg-gold text-accent-foreground shadow-elegant flex items-center justify-center hover:opacity-90 transition"
+          >
+            {playing ? <Pause className="h-5 w-5" /> : <Music className="h-5 w-5 animate-pulse" />}
+          </button>
+          <button
+            onClick={() => setShowVolume((s) => !s)}
+            aria-label="Pengaturan volume"
+            className="w-10 h-10 rounded-full bg-card/95 backdrop-blur border border-gold/30 text-foreground/80 hover:text-gold shadow-soft flex items-center justify-center transition"
+          >
+            {muted || volume === 0 ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
+          </button>
+        </div>
       )}
       {!opened && <Cover guestName={guestName} onOpen={handleOpen} />}
 
