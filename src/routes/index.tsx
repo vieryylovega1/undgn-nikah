@@ -16,9 +16,9 @@ export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       { title: "Undangan Pernikahan Ratu & Ega" },
-      { name: "description", content: "Dengan memohon rahmat Allah SWT, kami mengundang Anda ke pernikahan Ratu & Ega - 15 Agustus 2026" },
+      { name: "description", content: "Dengan memohon rahmat Allah SWT, kami mengundang Anda ke pernikahan Ratu & Ega - 1 Januari 2031" },
       { property: "og:title", content: "Undangan Pernikahan Ratu & Ega" },
-      { property: "og:description", content: "Sabtu, 15 Agustus 2026" },
+      { property: "og:description", content: "Rabu, 1 Januari 2031 - Sheraton Hotel Surabaya" },
     ],
     links: [
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
