@@ -26,7 +26,7 @@ export function Cover({ guestName, onOpen }: { guestName: string; onOpen: () => 
           The Wedding Of
         </p>
         <h1 className="font-script text-6xl sm:text-7xl text-gradient-gold leading-none mb-2">
-          Ratu &amp; Ega
+          Ega &amp; Ratu
         </h1>
         <p className="font-display text-base text-foreground/70 mb-10 mt-4">
           {weddingConfig.dateDisplay}
