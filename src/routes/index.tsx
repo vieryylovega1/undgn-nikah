@@ -15,9 +15,9 @@ export const Route = createFileRoute("/")({
   component: Invitation,
   head: () => ({
     meta: [
-      { title: "Undangan Pernikahan Ratu & Ega" },
-      { name: "description", content: "Dengan memohon rahmat Allah SWT, kami mengundang Anda ke pernikahan Ratu & Ega - 1 Januari 2031" },
-      { property: "og:title", content: "Undangan Pernikahan Ratu & Ega" },
+      { title: "Undangan Pernikahan Ega & Ratu" },
+      { name: "description", content: "Dengan memohon rahmat Allah SWT, kami mengundang Anda ke pernikahan Ega & Ratu - 1 Januari 2031" },
+      { property: "og:title", content: "Undangan Pernikahan Ega & Ratu" },
       { property: "og:description", content: "Rabu, 1 Januari 2031 - Sheraton Hotel Surabaya" },
     ],
     links: [
@@ -141,7 +141,7 @@ function Invitation() {
       <section className="relative h-screen min-h-[640px] flex items-end justify-center overflow-hidden">
         <img
           src={couple}
-          alt="Ratu dan Ega"
+          alt="Ega dan Ratu"
           width={1280}
           height={1920}
           className="absolute inset-0 w-full h-full object-cover"
@@ -152,7 +152,7 @@ function Invitation() {
             We Are Getting Married
           </p>
           <h1 className="font-script text-7xl sm:text-8xl text-gradient-gold leading-none">
-            Ratu &amp; Ega
+            Ega &amp; Ratu
           </h1>
           <p className="mt-4 font-display text-lg text-foreground/80">
             {W.dateDisplay}
@@ -177,7 +177,7 @@ function Invitation() {
           className="absolute top-0 right-0 w-48 opacity-40 pointer-events-none" />
         <SectionTitle eyebrow="The Bride & Groom" title="Mempelai" />
         <div className="grid sm:grid-cols-2 gap-8">
-          {[W.bride, W.groom].map((p, i) => (
+          {[W.groom, W.bride].map((p, i) => (
             <Card key={i} className="p-8 text-center border-gold/30 bg-card/80 shadow-soft">
               <p className="font-script text-5xl text-gradient-gold mb-2">{p.name}</p>
               <h3 className="font-display text-2xl mb-3">{p.fullName}</h3>
@@ -235,7 +235,7 @@ function Invitation() {
           className="absolute -bottom-20 left-1/2 -translate-x-1/2 w-[600px] opacity-15 pointer-events-none" />
         <div className="relative z-10">
           <p className="text-xs uppercase tracking-[0.4em] mb-4 opacity-70">Terima Kasih</p>
-          <h2 className="font-script text-5xl text-gradient-gold mb-4">Ratu &amp; Ega</h2>
+          <h2 className="font-script text-5xl text-gradient-gold mb-4">Ega &amp; Ratu</h2>
           <p className="text-sm opacity-80 max-w-md mx-auto">
             Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir dan memberikan doa restu.
           </p>
